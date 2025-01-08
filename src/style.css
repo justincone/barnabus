@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* background-color: #242424; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -25,9 +25,17 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
+  /* Image and Gradient Background */
+  background: 
+    url('images/background-stone-lg.jpeg') no-repeat center center fixed,
+    linear-gradient(0deg, rgba(6, 7, 3, 1) 0%, rgba(69, 55, 111, 1) 54%, rgba(67, 81, 162, 1) 100%);
+  
+  /* Background settings */
+  background-size: cover;
+  background-blend-mode: overlay;
 }
 
 h1 {
@@ -38,29 +46,40 @@ h1 {
 #app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; */
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #f7df1eaa);
+#logo img {
+  filter: drop-shadow(0px 0px 10px #000000);
 }
 
-.card {
-  padding: 2em;
+.video-container {
+  max-width: 95%;
+  height: auto;
+  margin: 0 auto;
+  padding: 0;
+  border: 4px solid transparent;
+  border-image: repeating-linear-gradient(
+    185deg,
+    rgb(94, 51, 111) 0%,
+    rgb(57, 43, 69) 20%,
+    rgb(51, 28, 58) 100%
+  ) 4;
+  box-shadow: inset 0px 0px 15px 15px rgba(0, 0, 0, 0.6), /* Inner shadow */
+  0px 0px 19px rgba(0, 0, 0, 1); /* Outer shadow */
+  display: block; /* Flexbox replaced to avoid shadow issues */
+  position: relative; /* Necessary for inset shadows to work properly */
 }
 
-.read-the-docs {
-  color: #888;
+video {
+  max-width: 100%;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  display: block; /* Removes inline element gaps */
+  position: relative;
+  z-index: -2;
 }
 
 button {
@@ -80,17 +99,4 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
