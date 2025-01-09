@@ -18,8 +18,20 @@ document.querySelector('#app').innerHTML = `
       </video>
     </div>
     <div class="controls d-flex justify-content-center my-3">
-      <button id="togglePlay" class="btn btn-primary mx-2">Play</button>
-      <button id="restart" class="btn btn-warning mx-2">Restart</button>
+      <img id="togglePlay" src="images/button-play.png" 
+      srcset="
+          images/button-play@.png 1x,
+          images/button-play@2x.png 2x,
+          images/button-play@3x.png 3x
+      " 
+      class="mx-1" alt="Play button">
+      <img id="restart" src="images/button-restart.png" 
+      srcset="
+          images/button-restart.png 1x,
+          images/button-restart@2x.png 2x,
+          images/button-restart@3x.png 3x
+        "
+      class="mx-2" alt="Restart button">
     </div>
     <div class="clue m-3">
       <div class="input-group my-3">
@@ -67,19 +79,30 @@ const video = document.getElementById('clueVideo');
 const togglePlayButton = document.getElementById('togglePlay');
 const restartButton = document.getElementById('restart');
 
-// Add a single toggle button for play/pause
 togglePlayButton.addEventListener('click', () => {
   if (video.paused || video.ended) {
     video.play();
-    togglePlayButton.textContent = 'Pause';
-    togglePlayButton.classList.remove('btn-primary');
-    togglePlayButton.classList.add('btn-danger');
+    togglePlayButton.src = 'images/button-pause.png'; // Change to pause image
+    togglePlayButton.srcset = `
+      images/button-pause.png 1x,
+      images/button-pause@2x.png 2x,
+      images/button-pause@3x.png 3x
+    `; // Set retina images for pause button
   } else {
     video.pause();
-    togglePlayButton.textContent = 'Play';
-    togglePlayButton.classList.remove('btn-danger');
-    togglePlayButton.classList.add('btn-primary');
+    togglePlayButton.src = 'images/button-play.png'; // Change to play image
+    togglePlayButton.srcset = `
+      images/button-play.png 1x,
+      images/button-play@2x.png 2x,
+      images/button-play@3x.png 3x
+    `; // Set retina images for play button
   }
+});
+
+restartButton.addEventListener('click', () => {
+  video.currentTime = 0; // Set video time to the beginning
+  video.play(); // Automatically start playing
+  togglePlayButton.src = 'images/button-pause.png'; // Change to pause image
 });
 
 // Add functionality for the restart button

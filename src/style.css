@@ -82,6 +82,10 @@ video {
   z-index: -2;
 }
 
+.controls img {
+  max-width: 56px;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
