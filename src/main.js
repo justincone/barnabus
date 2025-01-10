@@ -34,7 +34,7 @@ document.querySelector('#app').innerHTML = `
       class="mx-2" alt="Restart button">
     </div>
     <div class="clue m-3">
-      <div class="input-group my-3">
+      <div class="input-group my-3 px-4">
         <input type="text" id="answer" class="form-control" placeholder="Your answer here">
         <button id="submit" class="btn btn-primary">Submit</button>
       </div>
@@ -109,7 +109,12 @@ restartButton.addEventListener('click', () => {
 restartButton.addEventListener('click', () => {
   video.currentTime = 0; // Set video time to the beginning
   video.play(); // Automatically start playing
-  togglePlayButton.textContent = 'Pause'; // Update play button text
-  togglePlayButton.classList.remove('btn-primary');
-  togglePlayButton.classList.add('btn-danger');
+
+  // Update the play button to show the pause state
+  togglePlayButton.src = 'images/button-pause.png'; 
+  togglePlayButton.srcset = `
+    images/button-pause.png 1x,
+    images/button-pause@2x.png 2x,
+    images/button-pause@3x.png 3x
+  `;
 });
