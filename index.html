@@ -1,15 +1,72 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to the hunt!</title>
+    <link rel="stylesheet" href="/src/bootstrap.min.css">
+    <link rel="stylesheet" href="/src/style.css">
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div id="logo" class="m-0 p-0">
+        <img src="images/logo.png" 
+          srcset="
+            images/logo@1x.png 1x, 
+            images/logo@2x.png 2x, 
+            images/logo@3x.png 3x
+          " 
+          alt="Logo">
+      </div>
+
+      <div class="video-container">
+        <video id="clueVideo" playsinline poster="images/clue01-poster.jpg">
+          <source src="videos/clue01.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="controls d-flex justify-content-center my-3">
+        <img id="togglePlay" src="images/button-play.png" 
+          srcset="
+            images/button-play.png 1x,
+            images/button-play@2x.png 2x,
+            images/button-play@3x.png 3x
+          " 
+          class="mx-1" alt="Play button">
+        <img id="restart" src="images/button-restart.png" 
+          srcset="
+            images/button-restart.png 1x,
+            images/button-restart@2x.png 2x,
+            images/button-restart@3x.png 3x
+          " 
+          class="mx-2" alt="Restart button">
+      </div>
+
+      <div class="clue m-3">
+        <div class="input-group my-3 px-4">
+          <input type="text" id="answer" class="form-control" placeholder="Your answer here">
+          <button id="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+
+      <!-- Modal for Incorrect Guess -->
+      <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Sorry, that's not it. Try again.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

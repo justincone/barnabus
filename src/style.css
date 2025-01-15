@@ -43,7 +43,7 @@ body {
   min-height: 100vh;
   /* Image and Gradient Background */
   background: 
-    url('images/background-stone-lg.jpeg') no-repeat center center fixed,
+    url('/images/background-stone-lg.jpeg') no-repeat center center fixed,
     linear-gradient(0deg, rgba(6, 7, 3, 1) 0%, rgba(69, 55, 111, 1) 54%, rgba(67, 81, 162, 1) 100%);
   
   /* Background settings */
