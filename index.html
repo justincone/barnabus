@@ -48,6 +48,13 @@
             images/button-restart@3x.png 3x
           " 
           class="mx-2" alt="Restart button">
+        <img id="likeButton" src="images/button-like.png" 
+          srcset="
+            images/button-like.png 1x,
+            images/button-like@2x.png 2x,
+            images/button-like@3x.png 3x
+          " 
+          class="mx-1" alt="Like button" style="display: none;"> 
       </div>
 
       <div class="clue m-3">
@@ -70,6 +77,21 @@
           </div>
         </div>
       </div>
+
+      <!-- Modal for Like Button Feedback -->
+      <div class="modal fade" id="likeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Thanks for the feedback!
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>

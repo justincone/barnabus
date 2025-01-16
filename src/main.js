@@ -37,6 +37,7 @@ const clueData = {
       poster: '/images/clue04-poster.jpg',
     },
     hasInput: false,
+    hasLikeButton: true, // Indicates the Like button should appear
   },
 };
 
@@ -61,6 +62,23 @@ if (currentClue.hasInput) {
 // Video control buttons
 const togglePlayButton = document.getElementById('togglePlay');
 const restartButton = document.getElementById('restart');
+
+// Like button
+const likeButton = document.getElementById('likeButton');
+const likeModal = new Modal(document.getElementById('likeModal'));
+
+// Show/hide Like button based on the clue configuration
+if (currentClue.hasLikeButton) {
+  likeButton.style.display = 'inline'; // Show Like button
+} else {
+  likeButton.style.display = 'none'; // Hide Like button
+}
+
+// Add click event listener for Like button
+likeButton.addEventListener('click', () => {
+  likeModal.show(); // Show the feedback modal
+  likeButton.style.display = 'none'; // Hide Like button
+});
 
 // Toggle play/pause
 togglePlayButton.addEventListener('click', () => {
