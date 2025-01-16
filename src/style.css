@@ -183,3 +183,16 @@ button:focus-visible {
   background-color: #e8e8f0; /* Custom footer background */
   border-top: none; /* Remove border */
 }
+
+.fader {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out; /* Smooth fade effect */
+}
+
+.fader-out {
+  opacity: 0; /* Fade out */
+}
+
+.fader-in {
+  opacity: 1; /* Fade in */
+}
