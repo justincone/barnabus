@@ -12,7 +12,7 @@ const clueData = {
       src: '/videos/clue01.mp4',
       poster: '/images/clue01-poster.jpg',
     },
-    hasInput: true, // Indicates whether this clue has an input field
+    hasInput: true,
   },
   '02': {
     answers: ['178'],
@@ -23,7 +23,7 @@ const clueData = {
     hasInput: true,
   },
   '03': {
-    answers: [], // No answers needed
+    answers: [],
     video: {
       src: '/videos/clue03.mp4',
       poster: '/images/clue03-poster.jpg',
@@ -31,25 +31,61 @@ const clueData = {
     hasInput: false,
   },
   '04': {
-    answers: [], // No answers needed
+    answers: [],
     video: {
       src: '/videos/clue04.mp4',
       poster: '/images/clue04-poster.jpg',
     },
     hasInput: false,
-    hasLikeButton: true, // Indicates the Like button should appear
+    hasLikeButton: true,
   },
 };
 
 // Get current clue data
 let currentClue = clueData[clueNumber];
 
-// Update video source and poster dynamically
+// Video and controls
 const video = document.getElementById('clueVideo');
 const videoSource = video.querySelector('source');
+const togglePlayButton = document.getElementById('togglePlay');
+const restartButton = document.getElementById('restart');
+
+const setPlayButtonState = (isPlaying) => {
+  const state = isPlaying ? 'pause' : 'play';
+  const label = isPlaying ? 'Pause button' : 'Play button';
+
+  togglePlayButton.src = `/images/button-${state}.png`;
+  togglePlayButton.srcset = `
+    /images/button-${state}.png 1x,
+    /images/button-${state}@2x.png 2x,
+    /images/button-${state}@3x.png 3x
+  `;
+  togglePlayButton.alt = label;
+};
+
+const playVideo = () => {
+  const playPromise = video.play();
+
+  if (playPromise !== undefined) {
+    playPromise.catch((error) => {
+      console.warn('Video playback was prevented or failed:', error);
+      setPlayButtonState(false);
+    });
+  }
+};
+
+// Keep the custom button synchronized with the video element's actual state.
+video.addEventListener('play', () => setPlayButtonState(true));
+video.addEventListener('playing', () => setPlayButtonState(true));
+video.addEventListener('pause', () => setPlayButtonState(false));
+video.addEventListener('ended', () => setPlayButtonState(false));
+video.addEventListener('error', () => setPlayButtonState(false));
+
+// Update video source and poster dynamically
 videoSource.src = currentClue.video.src;
 video.poster = currentClue.video.poster;
-video.load(); // Load the new video source
+video.load();
+setPlayButtonState(false);
 
 // Handle visibility of input field and submit button
 const inputGroup = document.querySelector('.input-group');
@@ -59,61 +95,36 @@ if (currentClue.hasInput) {
   inputGroup.style.display = 'none';
 }
 
-// Video control buttons
-const togglePlayButton = document.getElementById('togglePlay');
-const restartButton = document.getElementById('restart');
-
 // Like button
 const likeButton = document.getElementById('likeButton');
 const likeModal = new Modal(document.getElementById('likeModal'));
 
-// Show/hide Like button based on the clue configuration
 if (currentClue.hasLikeButton) {
-  likeButton.style.display = 'inline'; // Show Like button
+  likeButton.style.display = 'inline';
 } else {
-  likeButton.style.display = 'none'; // Hide Like button
+  likeButton.style.display = 'none';
 }
 
-// Add click event listener for Like button
 likeButton.addEventListener('click', () => {
-  likeModal.show(); // Show the feedback modal
-  likeButton.style.display = 'none'; // Hide Like button
+  likeModal.show();
+  likeButton.style.display = 'none';
 });
 
 // Toggle play/pause
 togglePlayButton.addEventListener('click', () => {
   if (video.paused || video.ended) {
-    video.play();
-    togglePlayButton.src = '/images/button-pause.png';
-    togglePlayButton.srcset = `
-      /images/button-pause.png 1x,
-      /images/button-pause@2x.png 2x,
-      /images/button-pause@3x.png 3x
-    `;
+    playVideo();
   } else {
     video.pause();
-    togglePlayButton.src = '/images/button-play.png';
-    togglePlayButton.srcset = `
-      /images/button-play.png 1x,
-      /images/button-play@2x.png 2x,
-      /images/button-play@3x.png 3x
-    `;
   }
 });
 
 // Restart video
 restartButton.addEventListener('click', () => {
   video.currentTime = 0;
-  video.play();
-  togglePlayButton.src = '/images/button-pause.png';
-  togglePlayButton.srcset = `
-    /images/button-pause.png 1x,
-    /images/button-pause@2x.png 2x,
-    /images/button-pause@3x.png 3x
-  `;
+  playVideo();
 });
 
-// Get the fade overlay and container
 const clueContainer = document.getElementById('clueContainer');
 
 // Handle answer submission (only for clues with input fields)
@@ -123,82 +134,63 @@ if (currentClue.hasInput) {
   const errorModal = document.getElementById('errorModal');
 
   submitButton.addEventListener('click', () => {
-
-    // Pause the video
     video.pause();
-    togglePlayButton.src = '/images/button-play.png';
-    togglePlayButton.srcset = `
-      /images/button-play.png 1x,
-      /images/button-play@2x.png 2x,
-      /images/button-play@3x.png 3x
-    `;
 
     const userGuess = inputField.value.trim();
-    // console.log(`Current Clue Number: ${clueNumber}`);
-    // console.log('Current Clue Data:', currentClue);
 
-    // Check if the user's guess matches any answer in the current clue
     if (currentClue.answers.some(answer => answer.toLowerCase() === userGuess.toLowerCase())) {
-      // console.log('Correct Answer! Proceeding to the next clue.');
-
-      // Increment the clue number and update the URL
       const nextClue = parseInt(clueNumber) + 1;
       const nextClueKey = nextClue.toString().padStart(2, '0');
-      clueNumber = nextClueKey; // Update clueNumber
-      
+      clueNumber = nextClueKey;
+
       const newUrl = `${window.location.origin}${window.location.pathname}?clue=${clueNumber}`;
       window.history.replaceState({ path: newUrl }, '', newUrl);
 
       if (clueData[nextClueKey]) {
         const nextClueData = clueData[nextClueKey];
-        
-        // Apply fade-out effect to the current clue
+
         clueContainer.classList.add('fader-out');
 
-        // Swap and start the next video immediately while we're still inside
-        // the user's submit gesture. This is more reliable for mobile Safari.
+        // Swap the media and request playback immediately while still inside
+        // the user's Submit gesture. This is important for iOS Safari.
         videoSource.src = nextClueData.video.src;
         video.poster = nextClueData.video.poster;
         video.load();
-        video.play().then(() => {
-          togglePlayButton.src = '/images/button-pause.png';
-          togglePlayButton.srcset = `
-            /images/button-pause.png 1x,
-            /images/button-pause@2x.png 2x,
-            /images/button-pause@3x.png 3x
-          `;
-        }).catch((error) => {
-          console.warn('Automatic playback was prevented:', error);
-        });
+
+        // If the first play request happens before the new media is ready,
+        // make one additional attempt as soon as Safari says it can play.
+        const retryWhenReady = () => {
+          if (video.paused) {
+            playVideo();
+          }
+        };
+        video.addEventListener('canplay', retryWhenReady, { once: true });
+        playVideo();
 
         setTimeout(() => {
-          // Update the visibility of the input field
           if (nextClueData.hasInput) {
             inputGroup.style.display = 'flex';
           } else {
             inputGroup.style.display = 'none';
           }
 
-          // Update the current clue data
           currentClue = nextClueData;
 
-          // Apply fade-in effect for the next clue
           clueContainer.classList.remove('fader-out');
           clueContainer.classList.add('fader-in');
-        }, 500); // Match the duration of the fade-out transition
+        }, 500);
+
         inputField.value = '';
         clueContainer.classList.remove('fader-in');
       } else {
         alert('Congratulations! You’ve completed the hunt!');
       }
     } else {
-      // console.log('Incorrect Answer. Showing error modal.');
       const modal = new Modal(errorModal);
       modal.show();
     }
   });
 
-  // Reset focus and input field when the modal is closed
   errorModal.addEventListener('hidden.bs.modal', () => {
     inputField.value = '';
     inputField.focus();
