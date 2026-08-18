@@ -155,12 +155,23 @@ if (currentClue.hasInput) {
         // Apply fade-out effect to the current clue
         clueContainer.classList.add('fader-out');
 
-        setTimeout(() => {
-          // Update video and poster for the next clue
-          videoSource.src = nextClueData.video.src;
-          video.poster = nextClueData.video.poster;
-          video.load(); // Reload the video with the new source
+        // Swap and start the next video immediately while we're still inside
+        // the user's submit gesture. This is more reliable for mobile Safari.
+        videoSource.src = nextClueData.video.src;
+        video.poster = nextClueData.video.poster;
+        video.load();
+        video.play().then(() => {
+          togglePlayButton.src = '/images/button-pause.png';
+          togglePlayButton.srcset = `
+            /images/button-pause.png 1x,
+            /images/button-pause@2x.png 2x,
+            /images/button-pause@3x.png 3x
+          `;
+        }).catch((error) => {
+          console.warn('Automatic playback was prevented:', error);
+        });
 
+        setTimeout(() => {
           // Update the visibility of the input field
           if (nextClueData.hasInput) {
             inputGroup.style.display = 'flex';
